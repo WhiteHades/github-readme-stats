@@ -371,7 +371,7 @@ If we don't support your language, please consider contributing! You can find mo
 | `hide` | Hides the [specified items](#hiding-individual-stats) from stats. | string (comma-separated values) | `null` |
 | `hide_title` | Hides the title of your stats card. | boolean | `false` |
 | `card_width` | Sets the card's width manually. | number | `500px  (approx.)` |
-| `hide_rank` | Hides the rank and automatically resizes the card width. | boolean | `false` |
+| `hide_rank` | Hides the rank and automatically resizes the card width. Accepts a grade threshold (e.g. `A-`) to hide ranks below that level. | boolean \| string | `false` |
 | `rank_icon` | Shows alternative rank icon (i.e. `github`, `percentile` or `default`). | enum | `default` |
 | `show_icons` | Shows icons near all stats. | boolean | `false` |
 | `include_all_commits` | Count total commits instead of just the current year commits. | boolean | `false` |

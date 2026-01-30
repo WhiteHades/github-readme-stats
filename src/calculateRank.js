@@ -83,5 +83,7 @@ function calculateRank({
   return { level, percentile: rank * 100 };
 }
 
-export { calculateRank };
+const LEVELS = ["S", "A+", "A", "A-", "B+", "B", "B-", "C+", "C"];
+
+export { calculateRank, LEVELS };
 export default calculateRank;

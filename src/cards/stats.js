@@ -1,5 +1,6 @@
 // @ts-check
 
+import { LEVELS } from "../calculateRank.js";
 import { Card } from "../common/Card.js";
 import { getCardColors } from "../common/color.js";
 import { CustomError } from "../common/error.js";
@@ -299,6 +300,11 @@ const renderStatsCard = (stats, options = {}) => {
 
   const lheight = parseInt(String(line_height), 10);
 
+  const shouldHideRank =
+    hide_rank === true ||
+    (typeof hide_rank === "string" &&
+      LEVELS.indexOf(rank.level) > LEVELS.indexOf(hide_rank));
+
   // returns theme based colors with proper overrides and defaults
   const { titleColor, iconColor, textColor, bgColor, borderColor, ringColor } =
     getCardColors({
@@ -435,7 +441,7 @@ const renderStatsCard = (stats, options = {}) => {
       });
     });
 
-  if (statItems.length === 0 && hide_rank) {
+  if (statItems.length === 0 && shouldHideRank) {
     throw new CustomError(
       "Could not render stats card.",
       "Either stats or rank are required.",
@@ -446,7 +452,7 @@ const renderStatsCard = (stats, options = {}) => {
   // but if rank circle is visible clamp the minimum height to `150`
   let height = Math.max(
     45 + (statItems.length + 1) * lheight,
-    hide_rank ? 0 : statItems.length ? 150 : 180,
+    shouldHideRank ? 0 : statItems.length ? 150 : 180,
   );
 
   // the lower the user's percentile the better
@@ -471,13 +477,13 @@ const renderStatsCard = (stats, options = {}) => {
   };
 
   /*
-    When hide_rank=true, the minimum card width is 270 px + the title length and padding.
-    When hide_rank=false, the minimum card_width is 340 px + the icon width (if show_icons=true).
+    When shouldHideRank=true, the minimum card width is 270 px + the title length and padding.
+    When shouldHideRank=false, the minimum card_width is 340 px + the icon width (if show_icons=true).
     Numbers are picked by looking at existing dimensions on production.
   */
   const iconWidth = show_icons && statItems.length ? 16 + /* padding */ 1 : 0;
   const minCardWidth =
-    (hide_rank
+    (shouldHideRank
       ? clampValue(
           50 /* padding */ + calculateTextWidth() * 2,
           CARD_MIN_WIDTH,
@@ -487,7 +493,7 @@ const renderStatsCard = (stats, options = {}) => {
         ? RANK_CARD_MIN_WIDTH
         : RANK_ONLY_CARD_MIN_WIDTH) + iconWidth;
   const defaultCardWidth =
-    (hide_rank
+    (shouldHideRank
       ? CARD_DEFAULT_WIDTH
       : statItems.length
         ? RANK_CARD_DEFAULT_WIDTH
@@ -551,7 +557,7 @@ const renderStatsCard = (stats, options = {}) => {
   };
 
   // Conditionally rendered elements
-  const rankCircle = hide_rank
+  const rankCircle = shouldHideRank
     ? ""
     : `<g data-testid="rank-circle"
           transform="translate(${calculateRankXTranslation()}, ${

@@ -126,6 +126,33 @@ describe("Test renderStatsCard", () => {
     expect(queryByTestId(document.body, "rank-circle")).not.toBeInTheDocument();
   });
 
+  it("should hide_rank when grade is below threshold", () => {
+    document.body.innerHTML = renderStatsCard(
+      { ...stats, rank: { level: "B+", percentile: 55 } },
+      { hide_rank: "A-" },
+    );
+
+    expect(queryByTestId(document.body, "rank-circle")).not.toBeInTheDocument();
+  });
+
+  it("should show_rank when grade meets threshold", () => {
+    document.body.innerHTML = renderStatsCard(
+      { ...stats, rank: { level: "A-", percentile: 37 } },
+      { hide_rank: "A-" },
+    );
+
+    expect(queryByTestId(document.body, "rank-circle")).toBeInTheDocument();
+  });
+
+  it("should show_rank when grade exceeds threshold", () => {
+    document.body.innerHTML = renderStatsCard(
+      { ...stats, rank: { level: "S", percentile: 1 } },
+      { hide_rank: "A-" },
+    );
+
+    expect(queryByTestId(document.body, "rank-circle")).toBeInTheDocument();
+  });
+
   it("should render with custom width set", () => {
     document.body.innerHTML = renderStatsCard(stats);
     expect(document.querySelector("svg")).toHaveAttribute("width", "450");
