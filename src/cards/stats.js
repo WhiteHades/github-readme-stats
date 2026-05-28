@@ -295,6 +295,7 @@ const renderStatsCard = (stats, options = {}) => {
     locale,
     disable_animations = false,
     rank_icon = "default",
+    rank_gif,
     show = [],
   } = options;
 
@@ -559,16 +560,23 @@ const renderStatsCard = (stats, options = {}) => {
   // Conditionally rendered elements
   const rankCircle = shouldHideRank
     ? ""
-    : `<g data-testid="rank-circle"
-          transform="translate(${calculateRankXTranslation()}, ${
-            height / 2 - 50
-          })">
-        <circle class="rank-circle-rim" cx="-10" cy="8" r="40" />
-        <circle class="rank-circle" cx="-10" cy="8" r="40" />
-        <g class="rank-text">
-          ${rankIcon(rank_icon, rank?.level, rank?.percentile)}
-        </g>
-      </g>`;
+    : rank_gif
+      ? `<g data-testid="rank-circle"
+            transform="translate(${calculateRankXTranslation()}, ${
+              height / 2 - 50
+            })">
+          <image href="${rank_gif}" x="-50" y="-32" width="80" height="80" />
+        </g>`
+      : `<g data-testid="rank-circle"
+            transform="translate(${calculateRankXTranslation()}, ${
+              height / 2 - 50
+            })">
+          <circle class="rank-circle-rim" cx="-10" cy="8" r="40" />
+          <circle class="rank-circle" cx="-10" cy="8" r="40" />
+          <g class="rank-text">
+            ${rankIcon(rank_icon, rank?.level, rank?.percentile)}
+          </g>
+        </g>`;
 
   // Accessibility Labels
   const labels = Object.keys(STATS)
