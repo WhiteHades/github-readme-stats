@@ -105,6 +105,20 @@ export default async (req, res) => {
 
     setCacheHeaders(res, cacheSeconds);
 
+    let rankGifDataUri = rank_gif;
+    if (rank_gif) {
+      try {
+        const gifRes = await fetch(rank_gif);
+        if (gifRes.ok) {
+          const buf = Buffer.from(await gifRes.arrayBuffer());
+          const ext = rank_gif.endsWith(".svg") ? "svg+xml" : "gif";
+          rankGifDataUri = `data:image/${ext};base64,${buf.toString("base64")}`;
+        }
+      } catch {
+        // If fetch fails, fall through with the original URL
+      }
+    }
+
     return res.send(
       renderStatsCard(stats, {
         hide: parseArray(hide),
@@ -131,7 +145,7 @@ export default async (req, res) => {
         locale: locale ? locale.toLowerCase() : null,
         disable_animations: parseBoolean(disable_animations),
         rank_icon,
-        rank_gif,
+        rank_gif: rankGifDataUri,
         show: showStats,
       }),
     );
