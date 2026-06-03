@@ -911,6 +911,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     }
     .stat {
       font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${colors.textColor};
+      font-variant: small-caps;
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
@@ -920,6 +921,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     .lang-name {
       font: 400 11px "Segoe UI", Ubuntu, Sans-Serif;
       fill: ${colors.textColor};
+      font-variant: small-caps;
     }
     .stagger {
       opacity: 0;
