@@ -761,24 +761,6 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 </a>
 ```
 
-If you want to hide the rank below a grade threshold and place a custom GIF next to the card, do it with separate HTML images instead of trying to embed the GIF inside the SVG. GitHub strips SVG `<image>` tags in README rendering.
-
-```html
-<a href="https://github.com/mohammedefaz/github-readme-stats">
-  <img
-    height="200"
-    align="center"
-    src="https://stats.mohammedefaz.com/api?username=mohammedefaz&hide_rank=A-&show_icons=true"
-  />
-</a>
-<img
-  height="200"
-  align="center"
-  src="https://stats.mohammedefaz.com/gogeta.gif"
-  alt="Gogeta"
-/>
-```
-
 <details>
 <summary>:eyes: Show example</summary>
 
