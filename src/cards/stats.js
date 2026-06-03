@@ -1,12 +1,10 @@
 // @ts-check
 
-import { LEVELS } from "../calculateRank.js";
 import { Card } from "../common/Card.js";
 import { getCardColors } from "../common/color.js";
-import { CustomError } from "../common/error.js";
 import { kFormatter } from "../common/fmt.js";
 import { I18n } from "../common/I18n.js";
-import { icons, rankIcon } from "../common/icons.js";
+import { icons } from "../common/icons.js";
 import { clampValue } from "../common/ops.js";
 import { flexLayout, measureText } from "../common/render.js";
 import { statCardLocales, wakatimeCardLocales } from "../translations.js";
@@ -117,55 +115,13 @@ const createTextNode = ({
 };
 
 /**
- * Calculates progress along the boundary of the circle, i.e. its circumference.
- *
- * @param {number} value The rank value to calculate progress for.
- * @returns {number} Progress value.
- */
-const calculateCircleProgress = (value) => {
-  const radius = 40;
-  const c = Math.PI * (radius * 2);
-
-  if (value < 0) {
-    value = 0;
-  }
-  if (value > 100) {
-    value = 100;
-  }
-
-  return ((100 - value) / 100) * c;
-};
-
-/**
- * Retrieves the animation to display progress along the circumference of circle
- * from the beginning to the given value in a clockwise direction.
- *
- * @param {{progress: number}} progress The progress value to animate to.
- * @returns {string} Progress animation css.
- */
-const getProgressAnimation = ({ progress }) => {
-  return `
-    @keyframes rankAnimation {
-      from {
-        stroke-dashoffset: ${calculateCircleProgress(0)};
-      }
-      to {
-        stroke-dashoffset: ${calculateCircleProgress(progress)};
-      }
-    }
-  `;
-};
-
-/**
  * Retrieves CSS styles for a card.
  *
  * @param {Object} colors The colors to use for the card.
  * @param {string} colors.titleColor The title color.
  * @param {string} colors.textColor The text color.
  * @param {string} colors.iconColor The icon color.
- * @param {string} colors.ringColor The ring color.
  * @param {boolean} colors.show_icons Whether to show icons.
- * @param {number} colors.progress The progress value to animate to.
  * @returns {string} Card CSS styles.
  */
 const getStyles = ({
@@ -173,13 +129,12 @@ const getStyles = ({
   titleColor,
   textColor,
   iconColor,
-  ringColor,
   show_icons,
-  progress,
 }) => {
   return `
     .stat {
       font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${textColor};
+      font-variant: small-caps;
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
@@ -189,42 +144,12 @@ const getStyles = ({
       opacity: 0;
       animation: fadeInAnimation 0.3s ease-in-out forwards;
     }
-    .rank-text {
-      font: 800 24px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor};
-      animation: scaleInAnimation 0.3s ease-in-out forwards;
-    }
-    .rank-percentile-header {
-      font-size: 14px;
-    }
-    .rank-percentile-text {
-      font-size: 16px;
-    }
-    
     .not_bold { font-weight: 400 }
     .bold { font-weight: 700 }
     .icon {
       fill: ${iconColor};
       display: ${show_icons ? "block" : "none"};
     }
-
-    .rank-circle-rim {
-      stroke: ${ringColor};
-      fill: none;
-      stroke-width: 6;
-      opacity: 0.2;
-    }
-    .rank-circle {
-      stroke: ${ringColor};
-      stroke-dasharray: 250;
-      fill: none;
-      stroke-width: 6;
-      stroke-linecap: round;
-      opacity: 0.8;
-      transform-origin: -10px 8px;
-      transform: rotate(-90deg);
-      animation: rankAnimation 1s forwards ease-in-out;
-    }
-    ${process.env.NODE_ENV === "test" ? "" : getProgressAnimation({ progress })}
   `;
 };
 
@@ -268,7 +193,6 @@ const renderStatsCard = (stats, options = {}) => {
     totalDiscussionsStarted,
     totalDiscussionsAnswered,
     contributedTo,
-    rank,
   } = stats;
   const {
     hide = [],
@@ -276,12 +200,10 @@ const renderStatsCard = (stats, options = {}) => {
     hide_title = false,
     hide_border = false,
     card_width,
-    hide_rank = false,
     include_all_commits = false,
     commits_year,
     line_height = 25,
     title_color,
-    ring_color,
     icon_color,
     text_color,
     text_bold = true,
@@ -294,27 +216,21 @@ const renderStatsCard = (stats, options = {}) => {
     number_precision,
     locale,
     disable_animations = false,
-    rank_icon = "default",
-    rank_gif,
     show = [],
   } = options;
 
   const lheight = parseInt(String(line_height), 10);
 
-  const shouldHideRank =
-    hide_rank === true ||
-    (typeof hide_rank === "string" &&
-      LEVELS.indexOf(rank.level) > LEVELS.indexOf(hide_rank));
+  const shouldHideRank = false;
 
   // returns theme based colors with proper overrides and defaults
-  const { titleColor, iconColor, textColor, bgColor, borderColor, ringColor } =
+  const { titleColor, iconColor, textColor, bgColor, borderColor } =
     getCardColors({
       title_color,
       text_color,
       icon_color,
       bg_color,
       border_color,
-      ring_color,
       theme,
     });
 
@@ -442,29 +358,17 @@ const renderStatsCard = (stats, options = {}) => {
       });
     });
 
-  if (statItems.length === 0 && shouldHideRank) {
-    throw new CustomError(
-      "Could not render stats card.",
-      "Either stats or rank are required.",
-    );
-  }
-
   // Calculate the card height depending on how many items there are
-  // but if rank circle is visible clamp the minimum height to `150`
   let height = Math.max(
     45 + (statItems.length + 1) * lheight,
-    shouldHideRank ? 0 : statItems.length ? 150 : 180,
+    statItems.length ? 150 : 180,
   );
 
-  // the lower the user's percentile the better
-  const progress = 100 - rank.percentile;
   const cssStyles = getStyles({
     titleColor,
-    ringColor,
     textColor,
     iconColor,
     show_icons,
-    progress,
   });
 
   const calculateTextWidth = () => {
@@ -533,50 +437,8 @@ const renderStatsCard = (stats, options = {}) => {
     card.disableAnimations();
   }
 
-  /**
-   * Calculates the right rank circle translation values such that the rank circle
-   * keeps respecting the following padding:
-   *
-   * width > RANK_CARD_DEFAULT_WIDTH: The default right padding of 70 px will be used.
-   * width < RANK_CARD_DEFAULT_WIDTH: The left and right padding will be enlarged
-   *   equally from a certain minimum at RANK_CARD_MIN_WIDTH.
-   *
-   * @returns {number} - Rank circle translation value.
-   */
-  const calculateRankXTranslation = () => {
-    if (statItems.length) {
-      const minXTranslation = RANK_CARD_MIN_WIDTH + iconWidth - 70;
-      if (width > RANK_CARD_DEFAULT_WIDTH) {
-        const xMaxExpansion = minXTranslation + (450 - minCardWidth) / 2;
-        return xMaxExpansion + width - RANK_CARD_DEFAULT_WIDTH;
-      } else {
-        return minXTranslation + (width - minCardWidth) / 2;
-      }
-    } else {
-      return width / 2 + 20 - 10;
-    }
-  };
-
   // Conditionally rendered elements
-  const rankCircle = shouldHideRank
-    ? ""
-    : rank_gif
-      ? `<g data-testid="rank-circle"
-            transform="translate(${calculateRankXTranslation()}, ${
-              height / 2 - 50
-            })">
-          <image href="${rank_gif}" x="-50" y="-32" width="80" height="80" />
-        </g>`
-      : `<g data-testid="rank-circle"
-            transform="translate(${calculateRankXTranslation()}, ${
-              height / 2 - 50
-            })">
-          <circle class="rank-circle-rim" cx="-10" cy="8" r="40" />
-          <circle class="rank-circle" cx="-10" cy="8" r="40" />
-          <g class="rank-text">
-            ${rankIcon(rank_icon, rank?.level, rank?.percentile)}
-          </g>
-        </g>`;
+  const rankCircle = "";
 
   // Accessibility Labels
   const labels = Object.keys(STATS)
@@ -596,7 +458,7 @@ const renderStatsCard = (stats, options = {}) => {
     .join(", ");
 
   card.setAccessibilityLabel({
-    title: `${card.title}, Rank: ${rank.level}`,
+    title: card.title,
     desc: labels,
   });
 
