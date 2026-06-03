@@ -134,7 +134,7 @@ const getStyles = ({
   return `
     .stat {
       font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${textColor};
-      font-variant: small-caps;
+      text-transform: lowercase;
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
