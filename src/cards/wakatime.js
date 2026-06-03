@@ -199,6 +199,7 @@ const getStyles = ({
   return `
     .stat {
       font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${textColor};
+      font-variant: small-caps;
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
@@ -460,7 +461,7 @@ const renderWakatimeCard = (stats = {}, options = { hide: [] }) => {
         width: 100%;
       }
     }
-    .lang-name { font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor} }
+    .lang-name { font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif; fill: ${textColor}; font-variant: small-caps; }
     #rect-mask rect{
       animation: slideInAnimation 1s ease-in-out forwards;
     }
