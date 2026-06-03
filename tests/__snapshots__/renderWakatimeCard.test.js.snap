@@ -18,7 +18,7 @@ exports[`Test Render WakaTime Card should render correctly 1`] = `
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
             fill: #2f80ed;
             animation: fadeInAnimation 0.8s ease-in-out forwards;
-            font-variant: small-caps;
+            text-transform: lowercase;
           }
           @supports(-moz-appearance: auto) {
             /* Selector detects Firefox */
@@ -28,7 +28,7 @@ exports[`Test Render WakaTime Card should render correctly 1`] = `
     
     .stat {
       font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: #434d58;
-      font-variant: small-caps;
+      text-transform: lowercase;
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
@@ -57,7 +57,7 @@ exports[`Test Render WakaTime Card should render correctly 1`] = `
         width: 100%;
       }
     }
-    .lang-name { font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58; font-variant: small-caps; }
+    .lang-name { font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58; text-transform: lowercase; }
     #rect-mask rect{
       animation: slideInAnimation 1s ease-in-out forwards;
     }
@@ -178,7 +178,7 @@ exports[`Test Render WakaTime Card should render correctly with compact layout 1
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
             fill: #2f80ed;
             animation: fadeInAnimation 0.8s ease-in-out forwards;
-            font-variant: small-caps;
+            text-transform: lowercase;
           }
           @supports(-moz-appearance: auto) {
             /* Selector detects Firefox */
@@ -188,7 +188,7 @@ exports[`Test Render WakaTime Card should render correctly with compact layout 1
     
     .stat {
       font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: #434d58;
-      font-variant: small-caps;
+      text-transform: lowercase;
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
@@ -217,7 +217,7 @@ exports[`Test Render WakaTime Card should render correctly with compact layout 1
         width: 100%;
       }
     }
-    .lang-name { font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58; font-variant: small-caps; }
+    .lang-name { font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58; text-transform: lowercase; }
     #rect-mask rect{
       animation: slideInAnimation 1s ease-in-out forwards;
     }
@@ -332,7 +332,7 @@ exports[`Test Render WakaTime Card should render correctly with compact layout w
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
             fill: #2f80ed;
             animation: fadeInAnimation 0.8s ease-in-out forwards;
-            font-variant: small-caps;
+            text-transform: lowercase;
           }
           @supports(-moz-appearance: auto) {
             /* Selector detects Firefox */
@@ -342,7 +342,7 @@ exports[`Test Render WakaTime Card should render correctly with compact layout w
     
     .stat {
       font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: #434d58;
-      font-variant: small-caps;
+      text-transform: lowercase;
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
@@ -371,7 +371,7 @@ exports[`Test Render WakaTime Card should render correctly with compact layout w
         width: 100%;
       }
     }
-    .lang-name { font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58; font-variant: small-caps; }
+    .lang-name { font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58; text-transform: lowercase; }
     #rect-mask rect{
       animation: slideInAnimation 1s ease-in-out forwards;
     }
@@ -486,7 +486,7 @@ exports[`Test Render WakaTime Card should render correctly with percent display 
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
             fill: #2f80ed;
             animation: fadeInAnimation 0.8s ease-in-out forwards;
-            font-variant: small-caps;
+            text-transform: lowercase;
           }
           @supports(-moz-appearance: auto) {
             /* Selector detects Firefox */
@@ -496,7 +496,7 @@ exports[`Test Render WakaTime Card should render correctly with percent display 
     
     .stat {
       font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: #434d58;
-      font-variant: small-caps;
+      text-transform: lowercase;
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
@@ -525,7 +525,7 @@ exports[`Test Render WakaTime Card should render correctly with percent display 
         width: 100%;
       }
     }
-    .lang-name { font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58; font-variant: small-caps; }
+    .lang-name { font: 400 11px 'Segoe UI', Ubuntu, Sans-Serif; fill: #434d58; text-transform: lowercase; }
     #rect-mask rect{
       animation: slideInAnimation 1s ease-in-out forwards;
     }
