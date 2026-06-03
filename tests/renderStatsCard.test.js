@@ -7,7 +7,6 @@ import {
 import "@testing-library/jest-dom";
 import { cssToObject } from "@uppercod/css-to-object";
 import { renderStatsCard } from "../src/cards/stats.js";
-import { CustomError } from "../src/common/error.js";
 import { themes } from "../themes/index.js";
 
 const stats = {
@@ -42,7 +41,6 @@ describe("Test renderStatsCard", () => {
     expect(getByTestId(document.body, "prs").textContent).toBe("400");
     expect(getByTestId(document.body, "contribs").textContent).toBe("500");
     expect(queryByTestId(document.body, "card-bg")).toBeInTheDocument();
-    expect(queryByTestId(document.body, "rank-circle")).toBeInTheDocument();
 
     // Default hidden stats
     expect(queryByTestId(document.body, "reviews")).not.toBeInTheDocument();
@@ -120,39 +118,6 @@ describe("Test renderStatsCard", () => {
     expect(queryByTestId(document.body, "prs_merged_percentage")).toBeDefined();
   });
 
-  it("should hide_rank", () => {
-    document.body.innerHTML = renderStatsCard(stats, { hide_rank: true });
-
-    expect(queryByTestId(document.body, "rank-circle")).not.toBeInTheDocument();
-  });
-
-  it("should hide_rank when grade is below threshold", () => {
-    document.body.innerHTML = renderStatsCard(
-      { ...stats, rank: { level: "B+", percentile: 55 } },
-      { hide_rank: "A-" },
-    );
-
-    expect(queryByTestId(document.body, "rank-circle")).not.toBeInTheDocument();
-  });
-
-  it("should show_rank when grade meets threshold", () => {
-    document.body.innerHTML = renderStatsCard(
-      { ...stats, rank: { level: "A-", percentile: 37 } },
-      { hide_rank: "A-" },
-    );
-
-    expect(queryByTestId(document.body, "rank-circle")).toBeInTheDocument();
-  });
-
-  it("should show_rank when grade exceeds threshold", () => {
-    document.body.innerHTML = renderStatsCard(
-      { ...stats, rank: { level: "S", percentile: 1 } },
-      { hide_rank: "A-" },
-    );
-
-    expect(queryByTestId(document.body, "rank-circle")).toBeInTheDocument();
-  });
-
   it("should render with custom width set", () => {
     document.body.innerHTML = renderStatsCard(stats);
     expect(document.querySelector("svg")).toHaveAttribute("width", "450");
@@ -165,39 +130,16 @@ describe("Test renderStatsCard", () => {
     document.body.innerHTML = renderStatsCard(stats, { card_width: 1 });
     expect(document.querySelector("svg")).toHaveAttribute("width", "420");
 
-    // Test default minimum card width without rank circle.
+    // Test minimum card width with icons.
     document.body.innerHTML = renderStatsCard(stats, {
       card_width: 1,
-      hide_rank: true,
-    });
-    expect(document.querySelector("svg")).toHaveAttribute(
-      "width",
-      "305.81250000000006",
-    );
-
-    // Test minimum card width with rank and icons.
-    document.body.innerHTML = renderStatsCard(stats, {
-      card_width: 1,
-      hide_rank: true,
-      show_icons: true,
-    });
-    expect(document.querySelector("svg")).toHaveAttribute(
-      "width",
-      "322.81250000000006",
-    );
-
-    // Test minimum card width with icons but without rank.
-    document.body.innerHTML = renderStatsCard(stats, {
-      card_width: 1,
-      hide_rank: false,
       show_icons: true,
     });
     expect(document.querySelector("svg")).toHaveAttribute("width", "437");
 
-    // Test minimum card width without icons or rank.
+    // Test minimum card width without icons.
     document.body.innerHTML = renderStatsCard(stats, {
       card_width: 1,
-      hide_rank: false,
       show_icons: false,
     });
     expect(document.querySelector("svg")).toHaveAttribute("width", "420");
@@ -324,7 +266,6 @@ describe("Test renderStatsCard", () => {
   it("should render custom ring_color properly", () => {
     const customColors = {
       title_color: "5a0",
-      ring_color: "0000ff",
       icon_color: "1b998b",
       text_color: "9991",
       bg_color: "252525",
@@ -338,16 +279,10 @@ describe("Test renderStatsCard", () => {
     const headerClassStyles = stylesObject[":host"][".header "];
     const statClassStyles = stylesObject[":host"][".stat "];
     const iconClassStyles = stylesObject[":host"][".icon "];
-    const rankCircleStyles = stylesObject[":host"][".rank-circle "];
-    const rankCircleRimStyles = stylesObject[":host"][".rank-circle-rim "];
 
     expect(headerClassStyles.fill.trim()).toBe(`#${customColors.title_color}`);
     expect(statClassStyles.fill.trim()).toBe(`#${customColors.text_color}`);
     expect(iconClassStyles.fill.trim()).toBe(`#${customColors.icon_color}`);
-    expect(rankCircleStyles.stroke.trim()).toBe(`#${customColors.ring_color}`);
-    expect(rankCircleRimStyles.stroke.trim()).toBe(
-      `#${customColors.ring_color}`,
-    );
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
       "fill",
       "#252525",
@@ -374,27 +309,6 @@ describe("Test renderStatsCard", () => {
     expect(
       queryByTestId(document.body, "stars").previousElementSibling, // the label
     ).not.toHaveAttribute("x");
-  });
-
-  it("should auto resize if hide_rank is true", () => {
-    document.body.innerHTML = renderStatsCard(stats, {
-      hide_rank: true,
-    });
-
-    expect(
-      document.body.getElementsByTagName("svg")[0].getAttribute("width"),
-    ).toBe("305.81250000000006");
-  });
-
-  it("should auto resize if hide_rank is true & custom_title is set", () => {
-    document.body.innerHTML = renderStatsCard(stats, {
-      hide_rank: true,
-      custom_title: "Hello world",
-    });
-
-    expect(
-      document.body.getElementsByTagName("svg")[0].getAttribute("width"),
-    ).toBe("287");
   });
 
   it("should render translations", () => {
@@ -450,50 +364,5 @@ describe("Test renderStatsCard", () => {
       number_precision: 2,
     });
     expect(getByTestId(document.body, "commits").textContent).toBe("1999");
-  });
-
-  it("should render default rank icon with level A+", () => {
-    document.body.innerHTML = renderStatsCard(stats, {
-      rank_icon: "default",
-    });
-    expect(queryByTestId(document.body, "level-rank-icon")).toBeDefined();
-    expect(
-      queryByTestId(document.body, "level-rank-icon").textContent.trim(),
-    ).toBe("A+");
-  });
-
-  it("should render github rank icon", () => {
-    document.body.innerHTML = renderStatsCard(stats, {
-      rank_icon: "github",
-    });
-    expect(queryByTestId(document.body, "github-rank-icon")).toBeDefined();
-  });
-
-  it("should show the rank percentile", () => {
-    document.body.innerHTML = renderStatsCard(stats, {
-      rank_icon: "percentile",
-    });
-    expect(queryByTestId(document.body, "percentile-top-header")).toBeDefined();
-    expect(
-      queryByTestId(document.body, "percentile-top-header").textContent.trim(),
-    ).toBe("Top");
-    expect(queryByTestId(document.body, "rank-percentile-text")).toBeDefined();
-    expect(
-      queryByTestId(document.body, "percentile-rank-value").textContent.trim(),
-    ).toBe(stats.rank.percentile.toFixed(1) + "%");
-  });
-
-  it("should throw error if all stats and rank icon are hidden", () => {
-    expect(() =>
-      renderStatsCard(stats, {
-        hide: ["stars", "commits", "prs", "issues", "contribs"],
-        hide_rank: true,
-      }),
-    ).toThrow(
-      new CustomError(
-        "Could not render stats card.",
-        "Either stats or rank are required.",
-      ),
-    );
   });
 });
