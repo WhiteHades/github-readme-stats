@@ -373,7 +373,6 @@ If we don't support your language, please consider contributing! You can find mo
 | `card_width` | Sets the card's width manually. | number | `500px  (approx.)` |
 | `hide_rank` | Hides the rank and automatically resizes the card width. Accepts a grade threshold (e.g. `A-`) to hide ranks below that level. | boolean \| string | `false` |
 | `rank_icon` | Shows alternative rank icon (i.e. `github`, `percentile` or `default`). | enum | `default` |
-| `rank_gif` | Replaces the rank circle with a custom GIF/image URL. | string (URL) | `null` |
 | `show_icons` | Shows icons near all stats. | boolean | `false` |
 | `include_all_commits` | Count total commits instead of just the current year commits. | boolean | `false` |
 | `line_height` | Sets the line height between text. | integer | `25` |
@@ -760,6 +759,24 @@ By default, GitHub does not lay out the cards side by side. To do that, you can 
 <a href="https://github.com/anuraghazra/convoychat">
   <img height=200 align="center" src="https://github-readme-stats.vercel.app/api/top-langs?username=anuraghazra&layout=compact&langs_count=8&card_width=320" />
 </a>
+```
+
+If you want to hide the rank below a grade threshold and place a custom GIF next to the card, do it with separate HTML images instead of trying to embed the GIF inside the SVG. GitHub strips SVG `<image>` tags in README rendering.
+
+```html
+<a href="https://github.com/mohammedefaz/github-readme-stats">
+  <img
+    height="200"
+    align="center"
+    src="https://stats.mohammedefaz.com/api?username=mohammedefaz&hide_rank=A-&show_icons=true"
+  />
+</a>
+<img
+  height="200"
+  align="center"
+  src="https://stats.mohammedefaz.com/gogeta.gif"
+  alt="Gogeta"
+/>
 ```
 
 <details>
