@@ -223,7 +223,7 @@ class Card {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
             fill: ${this.colors.titleColor};
             animation: fadeInAnimation 0.8s ease-in-out forwards;
-            text-transform: lowercase;
+            font-variant: small-caps;
           }
           @supports(-moz-appearance: auto) {
             /* Selector detects Firefox */
