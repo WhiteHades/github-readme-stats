@@ -25,11 +25,13 @@ export default async (req, res) => {
     hide_title,
     hide_border,
     card_width,
+    hide_rank,
     show_icons,
     include_all_commits,
     commits_year,
     line_height,
     title_color,
+    ring_color,
     icon_color,
     text_color,
     text_bold,
@@ -44,6 +46,8 @@ export default async (req, res) => {
     number_format,
     number_precision,
     border_color,
+    rank_icon,
+    rank_gif,
     show,
   } = req.query;
   res.setHeader("Content-Type", "image/svg+xml");
@@ -101,6 +105,20 @@ export default async (req, res) => {
 
     setCacheHeaders(res, cacheSeconds);
 
+    let rankGifDataUri = rank_gif;
+    if (rank_gif) {
+      try {
+        const gifRes = await fetch(rank_gif);
+        if (gifRes.ok) {
+          const buf = Buffer.from(await gifRes.arrayBuffer());
+          const ext = rank_gif.endsWith(".svg") ? "svg+xml" : "gif";
+          rankGifDataUri = `data:image/${ext};base64,${buf.toString("base64")}`;
+        }
+      } catch {
+        // If fetch fails, fall through with the original URL
+      }
+    }
+
     return res.send(
       renderStatsCard(stats, {
         hide: parseArray(hide),
@@ -108,10 +126,12 @@ export default async (req, res) => {
         hide_title: parseBoolean(hide_title),
         hide_border: parseBoolean(hide_border),
         card_width: parseInt(card_width, 10),
+        hide_rank: hide_rank === "true" ? true : hide_rank,
         include_all_commits: parseBoolean(include_all_commits),
         commits_year: parseInt(commits_year, 10),
         line_height,
         title_color,
+        ring_color,
         icon_color,
         text_color,
         text_bold: parseBoolean(text_bold),
@@ -124,6 +144,8 @@ export default async (req, res) => {
         number_precision: parseInt(number_precision, 10),
         locale: locale ? locale.toLowerCase() : null,
         disable_animations: parseBoolean(disable_animations),
+        rank_icon,
+        rank_gif: rankGifDataUri,
         show: showStats,
       }),
     );
