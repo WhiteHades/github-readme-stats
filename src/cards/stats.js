@@ -217,6 +217,7 @@ const renderStatsCard = (stats, options = {}) => {
     locale,
     disable_animations = false,
     show = [],
+    rank_gif,
   } = options;
 
   const lheight = parseInt(String(line_height), 10);
@@ -438,7 +439,11 @@ const renderStatsCard = (stats, options = {}) => {
   }
 
   // Conditionally rendered elements
-  const rankCircle = "";
+  const rankCircle = rank_gif
+    ? `<g data-testid="rank-circle" transform="translate(${width / 2 - 40}, ${height / 2 - 50})">
+        <image href="${rank_gif}" x="-50" y="-32" width="80" height="80" />
+       </g>`
+    : "";
 
   // Accessibility Labels
   const labels = Object.keys(STATS)
