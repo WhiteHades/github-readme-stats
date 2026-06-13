@@ -245,7 +245,7 @@ class Card {
           x="0.5"
           y="0.5"
           rx="${this.border_radius}"
-          height="99%"
+          height="${this.height - 1}"
           stroke="${this.colors.borderColor}"
           width="${this.width - 1}"
           fill="${
