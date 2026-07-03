@@ -145,6 +145,16 @@ describe("Test renderStatsCard", () => {
     expect(document.querySelector("svg")).toHaveAttribute("width", "420");
   });
 
+  it("should allow compact custom width when rank is hidden", () => {
+    document.body.innerHTML = renderStatsCard(stats, {
+      card_width: 320,
+      custom_title: "Stats",
+      hide_rank: true,
+    });
+
+    expect(document.querySelector("svg")).toHaveAttribute("width", "320");
+  });
+
   it("should render default colors properly", () => {
     document.body.innerHTML = renderStatsCard(stats);
 

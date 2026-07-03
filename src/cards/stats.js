@@ -217,12 +217,13 @@ const renderStatsCard = (stats, options = {}) => {
     locale,
     disable_animations = false,
     show = [],
+    hide_rank = false,
     rank_gif,
   } = options;
 
   const lheight = parseInt(String(line_height), 10);
 
-  const shouldHideRank = false;
+  const shouldHideRank = hide_rank === true;
 
   // returns theme based colors with proper overrides and defaults
   const { titleColor, iconColor, textColor, bgColor, borderColor } =

@@ -16,6 +16,7 @@ export type StatCardOptions = CommonOptions & {
   hide: string[];
   show_icons: boolean;
   hide_title: boolean;
+  hide_rank: boolean | string;
   card_width: number;
   include_all_commits: boolean;
   commits_year: number;
@@ -26,6 +27,7 @@ export type StatCardOptions = CommonOptions & {
   number_precision: number;
   text_bold: boolean;
   show: string[];
+  rank_gif: string;
 };
 
 export type RepoCardOptions = CommonOptions & {
