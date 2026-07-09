@@ -467,7 +467,7 @@ const renderStatsCard = (stats, options = {}) => {
 
   card.setAccessibilityLabel({
     title: card.title,
-    desc: labels,
+    desc: labels.toLowerCase(),
   });
 
   return card.render(`

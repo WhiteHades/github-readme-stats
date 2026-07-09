@@ -31,6 +31,9 @@ describe("Test renderStatsCard", () => {
     expect(document.getElementsByClassName("header")[0].textContent).toBe(
       "anurag hazra's github stats",
     );
+    expect(document.getElementById("descId").textContent).toContain(
+      "total stars earned",
+    );
 
     expect(
       document.body.getElementsByTagName("svg")[0].getAttribute("height"),
