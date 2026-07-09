@@ -39,12 +39,17 @@ const GRAPHQL_REPOS_QUERY = `
 `;
 
 const GRAPHQL_STATS_QUERY = `
-  query userInfo($login: String!, $after: String, $includeMergedPullRequests: Boolean!, $includeDiscussions: Boolean!, $includeDiscussionsAnswers: Boolean!, $startTime: DateTime = null) {
+  query userInfo($login: String!, $after: String, $includeMergedPullRequests: Boolean!, $includeDiscussions: Boolean!, $includeDiscussionsAnswers: Boolean!, $startTime: DateTime = null, $contributionsStartTime: DateTime = null) {
     user(login: $login) {
       name
       login
       commits: contributionsCollection (from: $startTime) {
         totalCommitContributions,
+      }
+      contributions: contributionsCollection (from: $contributionsStartTime) {
+        contributionCalendar {
+          totalContributions
+        }
       }
       reviews: contributionsCollection {
         totalPullRequestReviewContributions
@@ -107,6 +112,7 @@ const fetcher = (variables, token) => {
  * @param {boolean} variables.includeDiscussions Include discussions.
  * @param {boolean} variables.includeDiscussionsAnswers Include discussions answers.
  * @param {string|undefined} variables.startTime Time to start the count of total commits.
+ * @param {string|undefined} variables.contributionsStartTime Time to start the count of total contributions.
  * @returns {Promise<import('axios').AxiosResponse>} Axios response.
  *
  * @description This function supports multi-page fetching if the 'FETCH_MULTI_PAGE_STARS' environment variable is set to true.
@@ -117,6 +123,7 @@ const statsFetcher = async ({
   includeDiscussions,
   includeDiscussionsAnswers,
   startTime,
+  contributionsStartTime,
 }) => {
   let stats;
   let hasNextPage = true;
@@ -130,6 +137,7 @@ const statsFetcher = async ({
       includeDiscussions,
       includeDiscussionsAnswers,
       startTime,
+      contributionsStartTime,
     };
     let res = await retryer(fetcher, variables);
     if (res.data.errors) {
@@ -244,6 +252,7 @@ const fetchStats = async (
     mergedPRsPercentage: 0,
     totalReviews: 0,
     totalCommits: 0,
+    totalContributions: 0,
     totalIssues: 0,
     totalStars: 0,
     totalDiscussionsStarted: 0,
@@ -258,6 +267,7 @@ const fetchStats = async (
     includeDiscussions: include_discussions,
     includeDiscussionsAnswers: include_discussions_answers,
     startTime: commits_year ? `${commits_year}-01-01T00:00:00Z` : undefined,
+    contributionsStartTime: `${new Date().getUTCFullYear()}-01-01T00:00:00Z`,
   });
 
   // Catch GraphQL errors.
@@ -293,6 +303,8 @@ const fetchStats = async (
   }
 
   stats.totalPRs = user.pullRequests.totalCount;
+  stats.totalContributions =
+    user.contributions.contributionCalendar.totalContributions;
   if (include_merged_pull_requests) {
     stats.totalPRsMerged = user.mergedPullRequests.totalCount;
     stats.mergedPRsPercentage =

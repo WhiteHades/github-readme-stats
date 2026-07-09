@@ -20,6 +20,7 @@ const CARD_PADDING = 25;
 const COMPACT_LAYOUT_BASE_HEIGHT = 90;
 const MAXIMUM_LANGS_COUNT = 20;
 const LANG_FONT_SIZE = 13;
+const SINGLE_COLUMN_LANG_GAP = 20;
 
 const NORMAL_LAYOUT_DEFAULT_LANGS_COUNT = 5;
 const COMPACT_LAYOUT_DEFAULT_LANGS_COUNT = 6;
@@ -268,6 +269,7 @@ const createProgressTextNode = ({
  * @param {boolean=} props.hideProgress Whether to hide percentage.
  * @param {string=} props.statsFormat Stats format
  * @param {number} props.index Index of the programming language.
+ * @param {number=} props.valueX The x position of the stat value.
  * @returns {string} Compact layout programming language SVG node.
  */
 const createCompactLangNode = ({
@@ -276,6 +278,7 @@ const createCompactLangNode = ({
   hideProgress,
   statsFormat = "percentages",
   index,
+  valueX,
 }) => {
   const percentages = (lang.size / totalSize) * 100;
   const displayValue = getDisplayValue(lang.size, percentages, statsFormat);
@@ -287,8 +290,13 @@ const createCompactLangNode = ({
     <g class="stagger" style="animation-delay: ${staggerDelay}ms">
       <circle cx="5" cy="6" r="5" fill="${color}" />
       <text data-testid="lang-name" x="15" y="10" class='lang-name'>
-        ${lang.name.toLowerCase()} ${hideProgress ? "" : displayValue.toLowerCase()}
+        ${lang.name.toLowerCase()} ${hideProgress || valueX ? "" : displayValue.toLowerCase()}
       </text>
+      ${
+        !hideProgress && valueX
+          ? `<text data-testid="lang-percent" x="${valueX}" y="10" class="lang-name" text-anchor="end">${displayValue.toLowerCase()}</text>`
+          : ""
+      }
     </g>
   `;
 };
@@ -301,6 +309,8 @@ const createCompactLangNode = ({
  * @param {number} props.totalSize Total size of all languages.
  * @param {boolean=} props.hideProgress Whether to hide percentage.
  * @param {string=} props.statsFormat Stats format
+ * @param {boolean=} props.singleColumn Whether to render languages in one column.
+ * @param {number=} props.valueX The x position of the stat value.
  * @returns {string} Programming languages SVG node.
  */
 const createLanguageTextNode = ({
@@ -308,7 +318,26 @@ const createLanguageTextNode = ({
   totalSize,
   hideProgress,
   statsFormat,
+  singleColumn,
+  valueX,
 }) => {
+  if (singleColumn) {
+    return flexLayout({
+      items: langs.map((lang, index) =>
+        createCompactLangNode({
+          lang,
+          totalSize,
+          hideProgress,
+          statsFormat,
+          index,
+          valueX,
+        }),
+      ),
+      gap: SINGLE_COLUMN_LANG_GAP,
+      direction: "column",
+    }).join("");
+  }
+
   const longestLang = getLongestLang(langs);
   const chunked = chunkArray(langs, langs.length / 2);
   const layouts = chunked.map((array) => {
@@ -403,6 +432,7 @@ const renderNormalLayout = (langs, width, totalLanguageSize, statsFormat) => {
  * @param {number} totalLanguageSize Total size of all languages.
  * @param {boolean=} hideProgress Whether to hide progress bar.
  * @param {string} statsFormat Stats format.
+ * @param {boolean=} singleColumn Whether to render languages in one column.
  * @returns {string} Compact layout card SVG object.
  */
 const renderCompactLayout = (
@@ -411,6 +441,7 @@ const renderCompactLayout = (
   totalLanguageSize,
   hideProgress,
   statsFormat = "percentages",
+  singleColumn,
 ) => {
   const paddingRight = 50;
   const offsetWidth = width - paddingRight;
@@ -458,6 +489,8 @@ const renderCompactLayout = (
         totalSize: totalLanguageSize,
         hideProgress,
         statsFormat,
+        singleColumn,
+        valueX: singleColumn ? offsetWidth : undefined,
       })}
     </g>
   `;
@@ -805,6 +838,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     border_color,
     disable_animations,
     stats_format = "percentages",
+    single_column = false,
   } = options;
 
   const i18n = new I18n({
@@ -855,8 +889,9 @@ const renderTopLanguages = (topLangs, options = {}) => {
       stats_format,
     );
   } else if (layout === "compact" || hide_progress == true) {
-    height =
-      calculateCompactLayoutHeight(langs.length) + (hide_progress ? -25 : 0);
+    height = single_column
+      ? COMPACT_LAYOUT_BASE_HEIGHT + langs.length * SINGLE_COLUMN_LANG_GAP + 5
+      : calculateCompactLayoutHeight(langs.length) + (hide_progress ? -25 : 0);
 
     finalLayout = renderCompactLayout(
       langs,
@@ -864,6 +899,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
       totalLanguageSize,
       hide_progress,
       stats_format,
+      single_column,
     );
   } else if (layout === "donut") {
     height = calculateDonutLayoutHeight(langs.length);

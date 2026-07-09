@@ -23,6 +23,7 @@ const stats = {
   name: "Anurag Hazra",
   totalStars: 100,
   totalCommits: 200,
+  totalContributions: 600,
   totalIssues: 300,
   totalPRs: 400,
   totalPRsMerged: 320,
@@ -52,6 +53,11 @@ const data_stats = {
       repositoriesContributedTo: { totalCount: stats.contributedTo },
       commits: {
         totalCommitContributions: stats.totalCommits,
+      },
+      contributions: {
+        contributionCalendar: {
+          totalContributions: stats.totalContributions,
+        },
       },
       reviews: {
         totalPullRequestReviewContributions: stats.totalReviews,

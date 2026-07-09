@@ -569,6 +569,34 @@ describe("Test renderTopLanguages", () => {
     );
   });
 
+  it("should render compact layout in a single column", () => {
+    document.body.innerHTML = renderTopLanguages(langs, {
+      layout: "compact",
+      card_width: 390,
+      single_column: true,
+    });
+
+    expect(document.querySelector("svg")).toHaveAttribute("width", "390");
+    expect(document.querySelector("svg")).toHaveAttribute("height", "155");
+    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
+      "html",
+    );
+    expect(
+      queryAllByTestId(document.body, "lang-name")[0],
+    ).not.toHaveTextContent("40.00%");
+    expect(
+      queryAllByTestId(document.body, "lang-percent")[0],
+    ).toHaveTextContent("40.00%");
+    expect(queryAllByTestId(document.body, "lang-percent")[0]).toHaveAttribute(
+      "x",
+      "340",
+    );
+    expect(queryAllByTestId(document.body, "lang-percent")[0]).toHaveAttribute(
+      "text-anchor",
+      "end",
+    );
+  });
+
   it("should render with layout donut", () => {
     document.body.innerHTML = renderTopLanguages(langs, { layout: "donut" });
 

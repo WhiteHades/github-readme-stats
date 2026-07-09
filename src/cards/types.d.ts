@@ -45,6 +45,7 @@ export type TopLangOptions = CommonOptions & {
   disable_animations: boolean;
   hide_progress: boolean;
   stats_format: "percentages" | "bytes";
+  single_column: boolean;
 };
 
 export type WakaTimeOptions = CommonOptions & {

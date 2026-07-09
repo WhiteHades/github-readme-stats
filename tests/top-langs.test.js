@@ -126,6 +126,31 @@ describe("Test /api/top-langs", () => {
     );
   });
 
+  it("should pass through single column compact layout", async () => {
+    const req = {
+      query: {
+        username: "anuraghazra",
+        layout: "compact",
+        single_column: "true",
+      },
+    };
+    const res = {
+      setHeader: jest.fn(),
+      send: jest.fn(),
+    };
+    mock.onPost("https://api.github.com/graphql").reply(200, data_langs);
+
+    await topLangs(req, res);
+
+    expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
+    expect(res.send).toHaveBeenCalledWith(
+      renderTopLanguages(langs, {
+        layout: "compact",
+        single_column: true,
+      }),
+    );
+  });
+
   it("should render error card on user data fetch error", async () => {
     const req = {
       query: {

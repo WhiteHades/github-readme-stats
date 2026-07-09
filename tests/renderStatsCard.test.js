@@ -16,6 +16,7 @@ const stats = {
   name: "Anurag Hazra",
   totalStars: 100,
   totalCommits: 200,
+  totalContributions: 600,
   totalIssues: 300,
   totalPRs: 400,
   totalPRsMerged: 320,
@@ -122,6 +123,24 @@ describe("Test renderStatsCard", () => {
     expect(queryByTestId(document.body, "discussions_answered")).toBeDefined();
     expect(queryByTestId(document.body, "prs_merged")).toBeDefined();
     expect(queryByTestId(document.body, "prs_merged_percentage")).toBeDefined();
+  });
+
+  it("should render total contributions when requested", () => {
+    document.body.innerHTML = renderStatsCard(stats, {
+      show: ["contributions"],
+      hide: ["commits"],
+    });
+
+    expect(queryByTestId(document.body, "commits")).not.toBeInTheDocument();
+    expect(queryByTestId(document.body, "contributions")).toHaveTextContent(
+      "600",
+    );
+    expect(
+      queryByTestId(document.body, "contributions").previousElementSibling,
+    ).toHaveTextContent("total contributions:");
+    expect(document.getElementById("descId").textContent).toContain(
+      "total contributions: 600",
+    );
   });
 
   it("should render with custom width set", () => {
