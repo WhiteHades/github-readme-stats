@@ -23,6 +23,9 @@ import {
 
 import { themes } from "../themes/index.js";
 
+const parseStyles = (css) =>
+  cssToObject(css.replace(/@font-face\s*{[^}]*}/g, ""));
+
 const langs = {
   HTML: {
     color: "#0f0",
@@ -451,12 +454,13 @@ describe("Test renderTopLanguages", () => {
     document.body.innerHTML = renderTopLanguages(langs);
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.textContent);
+    const stylesObject = parseStyles(styleTag.textContent);
 
     const headerStyles = stylesObject[":host"][".header "];
     const langNameStyles = stylesObject[":host"][".lang-name "];
 
     expect(styleTag.textContent).toContain("JetBrains Mono");
+    expect(styleTag.textContent).toContain("data:font/woff");
     expect(styleTag.textContent).toContain("font: 600 20px");
     expect(styleTag.textContent).toContain("font: 400 13px");
     expect(headerStyles.fill.trim()).toBe("#2f80ed");
@@ -478,7 +482,7 @@ describe("Test renderTopLanguages", () => {
     document.body.innerHTML = renderTopLanguages(langs, { ...customColors });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = parseStyles(styleTag.innerHTML);
 
     const headerStyles = stylesObject[":host"][".header "];
     const langNameStyles = stylesObject[":host"][".lang-name "];
@@ -498,7 +502,7 @@ describe("Test renderTopLanguages", () => {
     });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = parseStyles(styleTag.innerHTML);
 
     const headerStyles = stylesObject[":host"][".header "];
     const langNameStyles = stylesObject[":host"][".lang-name "];
@@ -518,7 +522,7 @@ describe("Test renderTopLanguages", () => {
       });
 
       const styleTag = document.querySelector("style");
-      const stylesObject = cssToObject(styleTag.innerHTML);
+      const stylesObject = parseStyles(styleTag.innerHTML);
 
       const headerStyles = stylesObject[":host"][".header "];
       const langNameStyles = stylesObject[":host"][".lang-name "];

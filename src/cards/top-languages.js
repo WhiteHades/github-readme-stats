@@ -3,6 +3,7 @@
 import { Card } from "../common/Card.js";
 import { getCardColors } from "../common/color.js";
 import { formatBytes } from "../common/fmt.js";
+import { jetBrainsMonoFontFace } from "../common/fonts.js";
 import { I18n } from "../common/I18n.js";
 import { chunkArray, clampValue, lowercaseTrim } from "../common/ops.js";
 import {
@@ -915,6 +916,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
         width: 100%;
       }
     }
+    ${jetBrainsMonoFontFace}
     .header {
       font: 600 20px 'JetBrains Mono', 'Segoe UI', Ubuntu, Sans-Serif;
       fill: ${colors.titleColor};

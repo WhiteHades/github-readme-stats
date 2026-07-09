@@ -3,6 +3,7 @@
 import { Card } from "../common/Card.js";
 import { getCardColors } from "../common/color.js";
 import { kFormatter } from "../common/fmt.js";
+import { jetBrainsMonoFontFace } from "../common/fonts.js";
 import { I18n } from "../common/I18n.js";
 import { icons } from "../common/icons.js";
 import { clampValue } from "../common/ops.js";
@@ -126,6 +127,7 @@ const createTextNode = ({
  */
 const getStyles = ({ titleColor, textColor, iconColor, show_icons }) => {
   return `
+    ${jetBrainsMonoFontFace}
     .header {
       font: 600 20px 'JetBrains Mono', 'Segoe UI', Ubuntu, Sans-Serif;
       fill: ${titleColor};

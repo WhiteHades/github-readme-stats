@@ -9,6 +9,9 @@ import { cssToObject } from "@uppercod/css-to-object";
 import { renderStatsCard } from "../src/cards/stats.js";
 import { themes } from "../themes/index.js";
 
+const parseStyles = (css) =>
+  cssToObject(css.replace(/@font-face\s*{[^}]*}/g, ""));
+
 const stats = {
   name: "Anurag Hazra",
   totalStars: 100,
@@ -162,13 +165,14 @@ describe("Test renderStatsCard", () => {
     document.body.innerHTML = renderStatsCard(stats);
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.textContent);
+    const stylesObject = parseStyles(styleTag.textContent);
 
     const headerClassStyles = stylesObject[":host"][".header "];
     const statClassStyles = stylesObject[":host"][".stat "];
     const iconClassStyles = stylesObject[":host"][".icon "];
 
     expect(styleTag.textContent).toContain("JetBrains Mono");
+    expect(styleTag.textContent).toContain("data:font/woff");
     expect(styleTag.textContent).toContain("font: 600 20px");
     expect(styleTag.textContent).toContain("font: 600 16px");
     expect(headerClassStyles.fill.trim()).toBe("#2f80ed");
@@ -191,7 +195,7 @@ describe("Test renderStatsCard", () => {
     document.body.innerHTML = renderStatsCard(stats, { ...customColors });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = parseStyles(styleTag.innerHTML);
 
     const headerClassStyles = stylesObject[":host"][".header "];
     const statClassStyles = stylesObject[":host"][".stat "];
@@ -213,7 +217,7 @@ describe("Test renderStatsCard", () => {
     });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = parseStyles(styleTag.innerHTML);
 
     const headerClassStyles = stylesObject[":host"][".header "];
     const statClassStyles = stylesObject[":host"][".stat "];
@@ -235,7 +239,7 @@ describe("Test renderStatsCard", () => {
       });
 
       const styleTag = document.querySelector("style");
-      const stylesObject = cssToObject(styleTag.innerHTML);
+      const stylesObject = parseStyles(styleTag.innerHTML);
 
       const headerClassStyles = stylesObject[":host"][".header "];
       const statClassStyles = stylesObject[":host"][".stat "];
@@ -262,7 +266,7 @@ describe("Test renderStatsCard", () => {
     });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = parseStyles(styleTag.innerHTML);
 
     const headerClassStyles = stylesObject[":host"][".header "];
     const statClassStyles = stylesObject[":host"][".stat "];
@@ -290,7 +294,7 @@ describe("Test renderStatsCard", () => {
     document.body.innerHTML = renderStatsCard(stats, { ...customColors });
 
     const styleTag = document.querySelector("style");
-    const stylesObject = cssToObject(styleTag.innerHTML);
+    const stylesObject = parseStyles(styleTag.innerHTML);
 
     const headerClassStyles = stylesObject[":host"][".header "];
     const statClassStyles = stylesObject[":host"][".stat "];
