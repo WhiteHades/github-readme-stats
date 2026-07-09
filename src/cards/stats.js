@@ -70,7 +70,7 @@ const createTextNode = ({
       ${iconSvg}
       <text class="stat ${
         bold ? " bold" : "not_bold"
-      }" ${labelOffset} y="12.5">${label.toLowerCase()}:</text>
+      }" ${labelOffset} y="12.5">${label.toLowerCase()}</text>
       <text
         class="stat ${bold ? " bold" : "not_bold"}"
         x="${valueX}"
@@ -429,14 +429,7 @@ const renderStatsCard = (stats, options = {}) => {
     .map((key) => {
       // @ts-ignore
       const stats = STATS[key];
-      if (key === "commits") {
-        return `${i18n.t("statcard.commits")} ${getTotalCommitsYearLabel(
-          include_all_commits,
-          commits_year,
-          i18n,
-        )} : ${stats.value}`;
-      }
-      return `${stats.label}: ${stats.value}`;
+      return `${stats.label} ${stats.value}`;
     })
     .join(", ");
 

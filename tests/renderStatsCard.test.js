@@ -137,9 +137,9 @@ describe("Test renderStatsCard", () => {
     );
     expect(
       queryByTestId(document.body, "contributions").previousElementSibling,
-    ).toHaveTextContent("total contributions:");
+    ).toHaveTextContent("total contributions");
     expect(document.getElementById("descId").textContent).toContain(
-      "total contributions: 600",
+      "total contributions 600",
     );
   });
 
@@ -373,27 +373,27 @@ describe("Test renderStatsCard", () => {
       document.querySelector(
         'g[transform="translate(0, 0)"]>.stagger>.stat.bold',
       ).textContent,
-    ).toMatchInlineSnapshot(`"获标星数:"`);
+    ).toMatchInlineSnapshot(`"获标星数"`);
     expect(
       document.querySelector(
         'g[transform="translate(0, 25)"]>.stagger>.stat.bold',
       ).textContent,
-    ).toMatchInlineSnapshot(`"累计提交总数 (去年):"`);
+    ).toMatchInlineSnapshot(`"累计提交总数 (去年)"`);
     expect(
       document.querySelector(
         'g[transform="translate(0, 50)"]>.stagger>.stat.bold',
       ).textContent,
-    ).toMatchInlineSnapshot(`"发起的 pr 总数:"`);
+    ).toMatchInlineSnapshot(`"发起的 pr 总数"`);
     expect(
       document.querySelector(
         'g[transform="translate(0, 75)"]>.stagger>.stat.bold',
       ).textContent,
-    ).toMatchInlineSnapshot(`"提出的 issue 总数:"`);
+    ).toMatchInlineSnapshot(`"提出的 issue 总数"`);
     expect(
       document.querySelector(
         'g[transform="translate(0, 100)"]>.stagger>.stat.bold',
       ).textContent,
-    ).toMatchInlineSnapshot(`"贡献的项目数（去年）:"`);
+    ).toMatchInlineSnapshot(`"贡献的项目数（去年）"`);
   });
 
   it("should render without rounding", () => {
