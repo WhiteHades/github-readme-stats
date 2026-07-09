@@ -161,6 +161,20 @@ describe("Test renderStatsCard", () => {
     expect(document.querySelector("svg")).toHaveAttribute("width", "320");
   });
 
+  it("should right-align stat values to avoid label overlap", () => {
+    document.body.innerHTML = renderStatsCard(stats, {
+      card_width: 365,
+      hide_rank: true,
+      show_icons: true,
+    });
+
+    expect(getByTestId(document.body, "commits")).toHaveAttribute(
+      "text-anchor",
+      "end",
+    );
+    expect(getByTestId(document.body, "commits")).toHaveAttribute("x", "315");
+  });
+
   it("should render default colors properly", () => {
     document.body.innerHTML = renderStatsCard(stats);
 

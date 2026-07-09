@@ -18,40 +18,6 @@ const RANK_ONLY_CARD_MIN_WIDTH = 290;
 const RANK_ONLY_CARD_DEFAULT_WIDTH = 290;
 
 /**
- * Long locales that need more space for text. Keep sorted alphabetically.
- *
- * @type {(keyof typeof wakatimeCardLocales["wakatimecard.title"])[]}
- */
-const LONG_LOCALES = [
-  "az",
-  "bg",
-  "cs",
-  "de",
-  "el",
-  "es",
-  "fil",
-  "fi",
-  "fr",
-  "hu",
-  "id",
-  "ja",
-  "ml",
-  "my",
-  "nl",
-  "pl",
-  "pt-br",
-  "pt-pt",
-  "ru",
-  "sr",
-  "sr-latn",
-  "sw",
-  "ta",
-  "uk-ua",
-  "uz",
-  "zh-tw",
-];
-
-/**
  * Create a stats card text item.
  *
  * @param {object} params Object that contains the createTextNode parameters.
@@ -62,7 +28,7 @@ const LONG_LOCALES = [
  * @param {string=} params.unitSymbol The unit symbol of the stat.
  * @param {number} params.index The index of the stat.
  * @param {boolean} params.showIcons Whether to show icons.
- * @param {number} params.shiftValuePos Number of pixels the value has to be shifted to the right.
+ * @param {number} params.valueX The x position of the stat value.
  * @param {boolean} params.bold Whether to bold the label.
  * @param {string} params.numberFormat The format of numbers on card.
  * @param {number=} params.numberPrecision The precision of numbers on card.
@@ -76,7 +42,7 @@ const createTextNode = ({
   unitSymbol,
   index,
   showIcons,
-  shiftValuePos,
+  valueX,
   bold,
   numberFormat,
   numberPrecision,
@@ -107,8 +73,9 @@ const createTextNode = ({
       }" ${labelOffset} y="12.5">${label.toLowerCase()}:</text>
       <text
         class="stat ${bold ? " bold" : "not_bold"}"
-        x="${(showIcons ? 140 : 120) + shiftValuePos}"
+        x="${valueX}"
         y="12.5"
+        text-anchor="end"
         data-testid="${id}"
       >${String(kValue).toLowerCase()}${unitSymbol ? ` ${unitSymbol}` : ""}</text>
     </g>
@@ -337,36 +304,12 @@ const renderStatsCard = (stats, options = {}) => {
     id: "contribs",
   };
 
-  // @ts-ignore
-  const isLongLocale = locale ? LONG_LOCALES.includes(locale) : false;
-
-  // filter out hidden stats defined by user & create the text nodes
-  const statItems = Object.keys(STATS)
-    .filter((key) => !hide.includes(key))
-    .map((key, index) => {
-      // @ts-ignore
-      const stats = STATS[key];
-
-      // create the text nodes, and pass index so that we can calculate the line spacing
-      return createTextNode({
-        icon: stats.icon,
-        label: stats.label,
-        value: stats.value,
-        id: stats.id,
-        unitSymbol: stats.unitSymbol,
-        index,
-        showIcons: show_icons,
-        shiftValuePos: 79.01 + (isLongLocale ? 50 : 0),
-        bold: text_bold,
-        numberFormat: number_format,
-        numberPrecision: number_precision,
-      });
-    });
+  const statKeys = Object.keys(STATS).filter((key) => !hide.includes(key));
 
   // Calculate the card height depending on how many items there are
   let height = Math.max(
-    45 + (statItems.length + 1) * lheight,
-    statItems.length ? 150 : 180,
+    45 + (statKeys.length + 1) * lheight,
+    statKeys.length ? 150 : 180,
   );
 
   const cssStyles = getStyles({
@@ -380,7 +323,7 @@ const renderStatsCard = (stats, options = {}) => {
     return measureText(
       custom_title
         ? custom_title
-        : statItems.length
+        : statKeys.length
           ? i18n.t("statcard.title")
           : i18n.t("statcard.ranktitle"),
     );
@@ -391,7 +334,7 @@ const renderStatsCard = (stats, options = {}) => {
     When shouldHideRank=false, the minimum card_width is 340 px + the icon width (if show_icons=true).
     Numbers are picked by looking at existing dimensions on production.
   */
-  const iconWidth = show_icons && statItems.length ? 16 + /* padding */ 1 : 0;
+  const iconWidth = show_icons && statKeys.length ? 16 + /* padding */ 1 : 0;
   const minCardWidth =
     (shouldHideRank
       ? clampValue(
@@ -399,13 +342,13 @@ const renderStatsCard = (stats, options = {}) => {
           CARD_MIN_WIDTH,
           Infinity,
         )
-      : statItems.length
+      : statKeys.length
         ? RANK_CARD_MIN_WIDTH
         : RANK_ONLY_CARD_MIN_WIDTH) + iconWidth;
   const defaultCardWidth =
     (shouldHideRank
       ? CARD_DEFAULT_WIDTH
-      : statItems.length
+      : statKeys.length
         ? RANK_CARD_DEFAULT_WIDTH
         : RANK_ONLY_CARD_DEFAULT_WIDTH) + iconWidth;
   let width = card_width
@@ -417,9 +360,30 @@ const renderStatsCard = (stats, options = {}) => {
     width = minCardWidth;
   }
 
+  // filter out hidden stats defined by user & create the text nodes
+  const statItems = statKeys.map((key, index) => {
+    // @ts-ignore
+    const stats = STATS[key];
+
+    // create the text nodes, and pass index so that we can calculate the line spacing
+    return createTextNode({
+      icon: stats.icon,
+      label: stats.label,
+      value: stats.value,
+      id: stats.id,
+      unitSymbol: stats.unitSymbol,
+      index,
+      showIcons: show_icons,
+      valueX: width - 50,
+      bold: text_bold,
+      numberFormat: number_format,
+      numberPrecision: number_precision,
+    });
+  });
+
   const card = new Card({
     customTitle: custom_title?.toLowerCase(),
-    defaultTitle: (statItems.length
+    defaultTitle: (statKeys.length
       ? i18n.t("statcard.title")
       : i18n.t("statcard.ranktitle")
     ).toLowerCase(),
@@ -451,8 +415,7 @@ const renderStatsCard = (stats, options = {}) => {
     : "";
 
   // Accessibility Labels
-  const labels = Object.keys(STATS)
-    .filter((key) => !hide.includes(key))
+  const labels = statKeys
     .map((key) => {
       // @ts-ignore
       const stats = STATS[key];
