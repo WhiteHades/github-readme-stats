@@ -103,13 +103,13 @@ const createTextNode = ({
       ${iconSvg}
       <text class="stat ${
         bold ? " bold" : "not_bold"
-      }" ${labelOffset} y="12.5">${label}:</text>
+      }" ${labelOffset} y="12.5">${label.toLowerCase()}:</text>
       <text
         class="stat ${bold ? " bold" : "not_bold"}"
         x="${(showIcons ? 140 : 120) + shiftValuePos}"
         y="12.5"
         data-testid="${id}"
-      >${kValue}${unitSymbol ? ` ${unitSymbol}` : ""}</text>
+      >${String(kValue).toLowerCase()}${unitSymbol ? ` ${unitSymbol}` : ""}</text>
     </g>
   `;
 };
@@ -124,21 +124,22 @@ const createTextNode = ({
  * @param {boolean} colors.show_icons Whether to show icons.
  * @returns {string} Card CSS styles.
  */
-const getStyles = ({
-  // eslint-disable-next-line no-unused-vars
-  titleColor,
-  textColor,
-  iconColor,
-  show_icons,
-}) => {
+const getStyles = ({ titleColor, textColor, iconColor, show_icons }) => {
   return `
-    .stat {
-      font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${textColor};
-      font-variant: small-caps;
+    .header {
+      font: 600 20px 'JetBrains Mono', 'Segoe UI', Ubuntu, Sans-Serif;
+      fill: ${titleColor};
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
-      .stat { font-size:12px; }
+      .header { font-size:17.5px; }
+    }
+    .stat {
+      font: 600 16px 'JetBrains Mono', 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${textColor};
+    }
+    @supports(-moz-appearance: auto) {
+      /* Selector detects Firefox */
+      .stat { font-size:14px; }
     }
     .stagger {
       opacity: 0;
@@ -415,10 +416,11 @@ const renderStatsCard = (stats, options = {}) => {
   }
 
   const card = new Card({
-    customTitle: custom_title,
-    defaultTitle: statItems.length
+    customTitle: custom_title?.toLowerCase(),
+    defaultTitle: (statItems.length
       ? i18n.t("statcard.title")
-      : i18n.t("statcard.ranktitle"),
+      : i18n.t("statcard.ranktitle")
+    ).toLowerCase(),
     width,
     height,
     border_radius,

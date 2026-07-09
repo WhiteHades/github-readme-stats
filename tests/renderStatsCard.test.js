@@ -29,7 +29,7 @@ describe("Test renderStatsCard", () => {
     document.body.innerHTML = renderStatsCard(stats);
 
     expect(document.getElementsByClassName("header")[0].textContent).toBe(
-      "Anurag Hazra's GitHub Stats",
+      "anurag hazra's github stats",
     );
 
     expect(
@@ -60,13 +60,13 @@ describe("Test renderStatsCard", () => {
     document.body.innerHTML = renderStatsCard({ ...stats, name: "Anil Das" });
 
     expect(document.getElementsByClassName("header")[0].textContent).toBe(
-      "Anil Das' GitHub Stats",
+      "anil das' github stats",
     );
 
     document.body.innerHTML = renderStatsCard({ ...stats, name: "Felix" });
 
     expect(document.getElementsByClassName("header")[0].textContent).toBe(
-      "Felix's GitHub Stats",
+      "felix's github stats",
     );
   });
 
@@ -165,6 +165,9 @@ describe("Test renderStatsCard", () => {
     const statClassStyles = stylesObject[":host"][".stat "];
     const iconClassStyles = stylesObject[":host"][".icon "];
 
+    expect(styleTag.textContent).toContain("JetBrains Mono");
+    expect(styleTag.textContent).toContain("font: 600 20px");
+    expect(styleTag.textContent).toContain("font: 600 16px");
     expect(headerClassStyles.fill.trim()).toBe("#2f80ed");
     expect(statClassStyles.fill.trim()).toBe("#434d58");
     expect(iconClassStyles.fill.trim()).toBe("#4c71f2");
@@ -324,7 +327,7 @@ describe("Test renderStatsCard", () => {
   it("should render translations", () => {
     document.body.innerHTML = renderStatsCard(stats, { locale: "cn" });
     expect(document.getElementsByClassName("header")[0].textContent).toBe(
-      "Anurag Hazra 的 GitHub 统计数据",
+      "anurag hazra 的 github 统计数据",
     );
     expect(
       document.querySelector(
@@ -340,7 +343,7 @@ describe("Test renderStatsCard", () => {
       document.querySelector(
         'g[transform="translate(0, 50)"]>.stagger>.stat.bold',
       ).textContent,
-    ).toMatchInlineSnapshot(`"发起的 PR 总数:"`);
+    ).toMatchInlineSnapshot(`"发起的 pr 总数:"`);
     expect(
       document.querySelector(
         'g[transform="translate(0, 75)"]>.stagger>.stat.bold',

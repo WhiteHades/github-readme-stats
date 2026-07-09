@@ -357,11 +357,11 @@ describe("Test renderTopLanguages", () => {
     document.body.innerHTML = renderTopLanguages(langs);
 
     expect(queryByTestId(document.body, "header")).toHaveTextContent(
-      "Most Used Languages",
+      "most used languages",
     );
 
     expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML",
+      "html",
     );
     expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
       "javascript",
@@ -456,6 +456,9 @@ describe("Test renderTopLanguages", () => {
     const headerStyles = stylesObject[":host"][".header "];
     const langNameStyles = stylesObject[":host"][".lang-name "];
 
+    expect(styleTag.textContent).toContain("JetBrains Mono");
+    expect(styleTag.textContent).toContain("font: 600 20px");
+    expect(styleTag.textContent).toContain("font: 400 13px");
     expect(headerStyles.fill.trim()).toBe("#2f80ed");
     expect(langNameStyles.fill.trim()).toBe("#434d58");
     expect(queryByTestId(document.body, "card-bg")).toHaveAttribute(
@@ -534,11 +537,11 @@ describe("Test renderTopLanguages", () => {
     document.body.innerHTML = renderTopLanguages(langs, { layout: "compact" });
 
     expect(queryByTestId(document.body, "header")).toHaveTextContent(
-      "Most Used Languages",
+      "most used languages",
     );
 
     expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 40.00%",
+      "html 40.00%",
     );
     expect(queryAllByTestId(document.body, "lang-progress")[0]).toHaveAttribute(
       "width",
@@ -566,11 +569,11 @@ describe("Test renderTopLanguages", () => {
     document.body.innerHTML = renderTopLanguages(langs, { layout: "donut" });
 
     expect(queryByTestId(document.body, "header")).toHaveTextContent(
-      "Most Used Languages",
+      "most used languages",
     );
 
     expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 40.00%",
+      "html 40.00%",
     );
     expect(queryAllByTestId(document.body, "lang-donut")[0]).toHaveAttribute(
       "size",
@@ -623,7 +626,7 @@ describe("Test renderTopLanguages", () => {
       { layout: "donut" },
     );
     expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 100.00%",
+      "html 100.00%",
     );
     expect(queryAllByTestId(document.body, "lang-donut")[0]).toHaveAttribute(
       "size",
@@ -641,11 +644,11 @@ describe("Test renderTopLanguages", () => {
     });
 
     expect(queryByTestId(document.body, "header")).toHaveTextContent(
-      "Most Used Languages",
+      "most used languages",
     );
 
     expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 40.00%",
+      "html 40.00%",
     );
     expect(queryAllByTestId(document.body, "lang-donut")[0]).toHaveAttribute(
       "size",
@@ -711,7 +714,7 @@ describe("Test renderTopLanguages", () => {
       { layout: "donut-vertical" },
     );
     expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 100.00%",
+      "html 100.00%",
     );
     expect(queryAllByTestId(document.body, "lang-donut")[0]).toHaveAttribute(
       "size",
@@ -736,11 +739,11 @@ describe("Test renderTopLanguages", () => {
     document.body.innerHTML = renderTopLanguages(langs, { layout: "pie" });
 
     expect(queryByTestId(document.body, "header")).toHaveTextContent(
-      "Most Used Languages",
+      "most used languages",
     );
 
     expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 40.00%",
+      "html 40.00%",
     );
     expect(queryAllByTestId(document.body, "lang-pie")[0]).toHaveAttribute(
       "size",
@@ -794,7 +797,7 @@ describe("Test renderTopLanguages", () => {
       { layout: "pie" },
     );
     expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 100.00%",
+      "html 100.00%",
     );
     expect(queryAllByTestId(document.body, "lang-pie")[0]).toHaveAttribute(
       "size",
@@ -844,7 +847,7 @@ describe("Test renderTopLanguages", () => {
   it('should show "No languages data." message instead of empty card when nothing to show', () => {
     document.body.innerHTML = renderTopLanguages({});
     expect(document.querySelector(".stat").textContent).toBe(
-      "No languages data.",
+      "no languages data.",
     );
   });
 
@@ -855,7 +858,7 @@ describe("Test renderTopLanguages", () => {
     });
 
     expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 40.00%",
+      "html 40.00%",
     );
 
     expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
@@ -872,15 +875,15 @@ describe("Test renderTopLanguages", () => {
     });
 
     expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
-      "HTML 200.0 B",
+      "html 200.0 b",
     );
 
     expect(queryAllByTestId(document.body, "lang-name")[1]).toHaveTextContent(
-      "javascript 200.0 B",
+      "javascript 200.0 b",
     );
 
     expect(queryAllByTestId(document.body, "lang-name")[2]).toHaveTextContent(
-      "css 100.0 B",
+      "css 100.0 b",
     );
   });
 });

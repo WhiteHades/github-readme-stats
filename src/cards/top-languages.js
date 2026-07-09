@@ -18,6 +18,7 @@ const DEFAULT_LANG_COLOR = "#858585";
 const CARD_PADDING = 25;
 const COMPACT_LAYOUT_BASE_HEIGHT = 90;
 const MAXIMUM_LANGS_COUNT = 20;
+const LANG_FONT_SIZE = 13;
 
 const NORMAL_LAYOUT_DEFAULT_LANGS_COUNT = 5;
 const COMPACT_LAYOUT_DEFAULT_LANGS_COUNT = 6;
@@ -242,8 +243,8 @@ const createProgressTextNode = ({
 
   return `
     <g class="stagger" style="animation-delay: ${staggerDelay}ms">
-      <text data-testid="lang-name" x="2" y="15" class="lang-name">${name}</text>
-      <text x="${progressTextX}" y="34" class="lang-name">${displayValue}</text>
+      <text data-testid="lang-name" x="2" y="15" class="lang-name">${name.toLowerCase()}</text>
+      <text x="${progressTextX}" y="34" class="lang-name">${displayValue.toLowerCase()}</text>
       ${createProgressNode({
         x: 0,
         y: 25,
@@ -285,7 +286,7 @@ const createCompactLangNode = ({
     <g class="stagger" style="animation-delay: ${staggerDelay}ms">
       <circle cx="5" cy="6" r="5" fill="${color}" />
       <text data-testid="lang-name" x="15" y="10" class='lang-name'>
-        ${lang.name} ${hideProgress ? "" : displayValue}
+        ${lang.name.toLowerCase()} ${hideProgress ? "" : displayValue.toLowerCase()}
       </text>
     </g>
   `;
@@ -329,7 +330,12 @@ const createLanguageTextNode = ({
 
   const percent = ((longestLang.size / totalSize) * 100).toFixed(2);
   const minGap = 150;
-  const maxGap = 20 + measureText(`${longestLang.name} ${percent}%`, 11);
+  const maxGap =
+    20 +
+    measureText(
+      `${longestLang.name.toLowerCase()} ${percent}%`,
+      LANG_FONT_SIZE,
+    );
   return flexLayout({
     items: layouts,
     gap: maxGap < minGap ? minGap : maxGap,
@@ -742,7 +748,7 @@ const noLanguagesDataNode = ({ color, text, layout }) => {
   return `
     <text x="${
       layout === "pie" || layout === "donut-vertical" ? CARD_PADDING : 0
-    }" y="11" class="stat bold" fill="${color}">${text}</text>
+    }" y="11" class="stat bold" fill="${color}">${text.toLowerCase()}</text>
   `;
 };
 
@@ -877,8 +883,8 @@ const renderTopLanguages = (topLangs, options = {}) => {
   }
 
   const card = new Card({
-    customTitle: custom_title,
-    defaultTitle: i18n.t("langcard.title"),
+    customTitle: custom_title?.toLowerCase(),
+    defaultTitle: i18n.t("langcard.title").toLowerCase(),
     width,
     height,
     border_radius,
@@ -909,16 +915,24 @@ const renderTopLanguages = (topLangs, options = {}) => {
         width: 100%;
       }
     }
-    .stat {
-      font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${colors.textColor};
+    .header {
+      font: 600 20px 'JetBrains Mono', 'Segoe UI', Ubuntu, Sans-Serif;
+      fill: ${colors.titleColor};
     }
     @supports(-moz-appearance: auto) {
       /* Selector detects Firefox */
-      .stat { font-size:12px; }
+      .header { font-size:17.5px; }
+    }
+    .stat {
+      font: 600 16px 'JetBrains Mono', 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: ${colors.textColor};
+    }
+    @supports(-moz-appearance: auto) {
+      /* Selector detects Firefox */
+      .stat { font-size:14px; }
     }
     .bold { font-weight: 700 }
     .lang-name {
-      font: 400 11px "Segoe UI", Ubuntu, Sans-Serif;
+      font: 400 ${LANG_FONT_SIZE}px "JetBrains Mono", "Segoe UI", Ubuntu, Sans-Serif;
       fill: ${colors.textColor};
     }
     .stagger {
