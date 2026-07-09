@@ -126,20 +126,23 @@ describe("Test renderStatsCard", () => {
   });
 
   it("should render total contributions when requested", () => {
-    document.body.innerHTML = renderStatsCard(stats, {
-      show: ["contributions"],
-      hide: ["commits"],
-    });
+    document.body.innerHTML = renderStatsCard(
+      { ...stats, totalContributions: 3800 },
+      {
+        show: ["contributions"],
+        hide: ["commits"],
+      },
+    );
 
     expect(queryByTestId(document.body, "commits")).not.toBeInTheDocument();
     expect(queryByTestId(document.body, "contributions")).toHaveTextContent(
-      "600",
+      "3800",
     );
     expect(
       queryByTestId(document.body, "contributions").previousElementSibling,
     ).toHaveTextContent("total contributions");
     expect(document.getElementById("descId").textContent).toContain(
-      "total contributions 600",
+      "total contributions 3800",
     );
   });
 

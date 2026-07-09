@@ -52,7 +52,9 @@ const createTextNode = ({
       ? clampValue(numberPrecision, 0, 2)
       : undefined;
   const kValue =
-    numberFormat.toLowerCase() === "long" || id === "prs_merged_percentage"
+    numberFormat.toLowerCase() === "long" ||
+    id === "prs_merged_percentage" ||
+    id === "contributions"
       ? value
       : kFormatter(value, precision);
   const staggerDelay = (index + 3) * 150;
