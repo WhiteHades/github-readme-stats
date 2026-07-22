@@ -18,6 +18,60 @@ import { fetchTopLanguages } from "../src/fetchers/top-languages.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
 const HIDDEN_LANGUAGES = ["Vue", "HTML", "CSS", "SCSS", "JavaScript"];
+const LANGUAGE_COMPLEXITY_WEIGHTS = {
+  assembly: 1.25,
+  c: 1.25,
+  "c++": 1.25,
+  cmake: 1.25,
+  csharp: 0.75,
+  cuda: 1.25,
+  dart: 0.75,
+  elixir: 0.75,
+  "f#": 0.75,
+  fortran: 1.25,
+  go: 0.75,
+  haskell: 0.75,
+  java: 0.75,
+  javascript: 0.75,
+  julia: 0.75,
+  kotlin: 0.75,
+  lua: 0.75,
+  makefile: 1.25,
+  matlab: 0.75,
+  "objective-c": 1.25,
+  perl: 0.75,
+  php: 0.75,
+  python: 0.75,
+  r: 0.75,
+  ruby: 0.75,
+  rust: 1.25,
+  scala: 0.75,
+  swift: 0.75,
+  typescript: 0.75,
+  "visual basic .net": 0.75,
+  vhdl: 1.25,
+  zig: 1.25,
+};
+
+/**
+ * Apply the instance-wide language-complexity multipliers to card scores.
+ *
+ * @param {import("../src/fetchers/types").TopLangData} topLangs Fetched language scores.
+ * @returns {import("../src/fetchers/types").TopLangData} Weighted language scores.
+ */
+const applyLanguageComplexityWeights = (topLangs) => {
+  return Object.fromEntries(
+    Object.entries(topLangs).map(([name, language]) => [
+      name,
+      {
+        ...language,
+        size:
+          language.size *
+          (LANGUAGE_COMPLEXITY_WEIGHTS[language.name.toLowerCase()] ?? 1),
+      },
+    ]),
+  );
+};
 
 // @ts-ignore
 export default async (req, res) => {
@@ -121,11 +175,13 @@ export default async (req, res) => {
   }
 
   try {
-    const topLangs = await fetchTopLanguages(
-      username,
-      parseArray(exclude_repo),
-      size_weight,
-      count_weight,
+    const topLangs = applyLanguageComplexityWeights(
+      await fetchTopLanguages(
+        username,
+        parseArray(exclude_repo),
+        size_weight,
+        count_weight,
+      ),
     );
     const cacheSeconds = resolveCacheSeconds({
       requested: parseInt(cache_seconds, 10),
@@ -190,3 +246,5 @@ export default async (req, res) => {
     );
   }
 };
+
+export { applyLanguageComplexityWeights };

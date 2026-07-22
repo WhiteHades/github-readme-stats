@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, jest } from "@jest/globals";
 import "@testing-library/jest-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import topLangs from "../api/top-langs.js";
+import topLangs, { applyLanguageComplexityWeights } from "../api/top-langs.js";
 import { renderTopLanguages } from "../src/cards/top-languages.js";
 import { renderError } from "../src/common/render.js";
 import { CACHE_TTL, DURATIONS } from "../src/common/cache.js";
@@ -75,6 +75,20 @@ afterEach(() => {
 });
 
 describe("Test /api/top-langs", () => {
+  it("should apply language-complexity weights", () => {
+    expect(
+      applyLanguageComplexityWeights({
+        C: { color: "#555", name: "C", size: 100 },
+        Python: { color: "#3572A5", name: "Python", size: 100 },
+        SQL: { color: "#e38c00", name: "SQL", size: 100 },
+      }),
+    ).toStrictEqual({
+      C: { color: "#555", name: "C", size: 125 },
+      Python: { color: "#3572A5", name: "Python", size: 75 },
+      SQL: { color: "#e38c00", name: "SQL", size: 100 },
+    });
+  });
+
   it("should test the request", async () => {
     const req = {
       query: {
