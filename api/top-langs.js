@@ -17,6 +17,8 @@ import { renderError } from "../src/common/render.js";
 import { fetchTopLanguages } from "../src/fetchers/top-languages.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
+const HIDDEN_LANGUAGES = ["Vue", "HTML", "CSS", "SCSS", "JavaScript"];
+
 // @ts-ignore
 export default async (req, res) => {
   const {
@@ -140,7 +142,7 @@ export default async (req, res) => {
         hide_title: parseBoolean(hide_title),
         hide_border: parseBoolean(hide_border),
         card_width: parseInt(card_width, 10),
-        hide: parseArray(hide),
+        hide: [...HIDDEN_LANGUAGES, ...parseArray(hide)],
         title_color,
         text_color,
         bg_color,

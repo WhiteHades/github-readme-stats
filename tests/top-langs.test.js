@@ -90,7 +90,11 @@ describe("Test /api/top-langs", () => {
     await topLangs(req, res);
 
     expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
-    expect(res.send).toHaveBeenCalledWith(renderTopLanguages(langs));
+    expect(res.send).toHaveBeenCalledWith(
+      renderTopLanguages(langs, {
+        hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript"],
+      }),
+    );
   });
 
   it("should work with the query options", async () => {
@@ -116,6 +120,7 @@ describe("Test /api/top-langs", () => {
     expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
     expect(res.send).toHaveBeenCalledWith(
       renderTopLanguages(langs, {
+        hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript"],
         hide_title: true,
         card_width: 100,
         title_color: "fff",
@@ -145,6 +150,7 @@ describe("Test /api/top-langs", () => {
     expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
     expect(res.send).toHaveBeenCalledWith(
       renderTopLanguages(langs, {
+        hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript"],
         layout: "compact",
         single_column: true,
       }),
