@@ -38,4 +38,4 @@ jobs:
       - name: Run end-to-end tests.
         run: npm run test:e2e
         # env:
-        #   VERCEL_PREVIEW_URL: ${{ github.event.deployment_status.target_url }}
+        #   DEPLOYMENT_URL: ${{ github.event.deployment_status.target_url }}

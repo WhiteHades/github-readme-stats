@@ -183,6 +183,7 @@ const fetchTotalCommits = (variables, token) => {
       "Content-Type": "application/json",
       Accept: "application/vnd.github.cloak-preview",
       Authorization: `token ${token}`,
+      "User-Agent": "github-readme-stats",
     },
   });
 };

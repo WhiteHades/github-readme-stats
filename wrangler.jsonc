@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "mohammedefaz-stats",
+  "pages_build_output_dir": "./public",
+  "compatibility_date": "2026-07-29",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "CACHE_SECONDS": "3600",
+  },
+}

@@ -27,10 +27,12 @@
     "preview-theme": "node scripts/preview-theme",
     "close-stale-theme-prs": "node scripts/close-stale-theme-prs",
     "generate-langs-json": "node scripts/generate-langs-json",
+    "preview:cloudflare": "wrangler pages dev",
+    "deploy": "wrangler pages deploy",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "lint": "npx eslint --max-warnings 0 \"./src/**/*.js\" \"./scripts/**/*.js\" \"./tests/**/*.js\" \"./api/**/*.js\" \"./themes/**/*.js\"",
+    "lint": "npx eslint --max-warnings 0 \"./src/**/*.js\" \"./scripts/**/*.js\" \"./tests/**/*.js\" \"./api/**/*.js\" \"./functions/**/*.js\" \"./themes/**/*.js\"",
     "bench": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config jest.bench.config.js"
   },
   "author": "Anurag Hazra",
@@ -58,7 +60,8 @@
     "lint-staged": "^16.2.7",
     "lodash.snakecase": "^4.1.1",
     "parse-diff": "^0.11.1",
-    "prettier": "^3.7.3"
+    "prettier": "^3.7.3",
+    "wrangler": "4.115.0"
   },
   "dependencies": {
     "axios": "^1.13.1",
