@@ -79,13 +79,17 @@ describe("Test /api/top-langs", () => {
     expect(
       applyLanguageComplexityWeights({
         C: { color: "#555", name: "C", size: 100 },
+        Makefile: { color: "#427819", name: "Makefile", size: 100 },
         Python: { color: "#3572A5", name: "Python", size: 100 },
         SQL: { color: "#e38c00", name: "SQL", size: 100 },
+        TypeScript: { color: "#3178C6", name: "TypeScript", size: 100 },
       }),
     ).toStrictEqual({
       C: { color: "#555", name: "C", size: 125 },
-      Python: { color: "#3572A5", name: "Python", size: 75 },
+      Makefile: { color: "#427819", name: "Makefile", size: 100 },
+      Python: { color: "#3572A5", name: "Python", size: 50 },
       SQL: { color: "#e38c00", name: "SQL", size: 100 },
+      TypeScript: { color: "#3178C6", name: "TypeScript", size: 50 },
     });
   });
 
