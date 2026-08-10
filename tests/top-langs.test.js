@@ -85,7 +85,7 @@ describe("Test /api/top-langs", () => {
         TypeScript: { color: "#3178C6", name: "TypeScript", size: 100 },
       }),
     ).toStrictEqual({
-      C: { color: "#555", name: "C", size: 125 },
+      C: { color: "#555", name: "C", size: 100 },
       Makefile: { color: "#427819", name: "Makefile", size: 70 },
       Python: { color: "#3572A5", name: "Python", size: 30 },
       SQL: { color: "#e38c00", name: "SQL", size: 100 },

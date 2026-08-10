@@ -20,7 +20,7 @@ import { isLocaleAvailable } from "../src/translations.js";
 const HIDDEN_LANGUAGES = ["Vue", "HTML", "CSS", "SCSS", "JavaScript"];
 const LANGUAGE_COMPLEXITY_WEIGHTS = {
   assembly: 1.25,
-  c: 1.25,
+  c: 1,
   "c++": 1.25,
   cmake: 1.25,
   csharp: 0.75,
