@@ -21,7 +21,7 @@ const HIDDEN_LANGUAGES = ["Vue", "HTML", "CSS", "SCSS", "JavaScript"];
 const LANGUAGE_COMPLEXITY_WEIGHTS = {
   assembly: 1.25,
   c: 0.8,
-  "c++": 1.25,
+  "c++": 1,
   cmake: 1.25,
   csharp: 0.75,
   cuda: 1.25,
