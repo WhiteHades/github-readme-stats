@@ -119,11 +119,11 @@ describe("Test /api/top-langs", () => {
       renderTopLanguages(
         {
           ...languages,
-          C: { ...languages.C, size: 125 },
-          "C++": { ...languages["C++"], size: 125 },
-          Rust: { ...languages.Rust, size: 125 },
-          Python: { ...languages.Python, size: 50 },
-          TypeScript: { ...languages.TypeScript, size: 150 },
+          C: { ...languages.C, size: 140 },
+          "C++": { ...languages["C++"], size: 140 },
+          Rust: { ...languages.Rust, size: 140 },
+          Python: { ...languages.Python, size: 40 },
+          TypeScript: { ...languages.TypeScript, size: 120 },
           "Jupyter Notebook": { ...languages["Jupyter Notebook"], size: 500 },
         },
         {

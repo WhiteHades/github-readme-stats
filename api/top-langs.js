@@ -19,19 +19,19 @@ import { isLocaleAvailable } from "../src/translations.js";
 
 const HIDDEN_LANGUAGES = ["Vue", "HTML", "CSS", "SCSS", "JavaScript", "TeX"];
 const LANGUAGE_WEIGHTS = {
-  python: 0.25,
-  typescript: 0.5,
+  python: 0.2,
+  typescript: 0.4,
   "jupyter notebook": 1.25,
-  assembly: 1.25,
-  c: 1.25,
-  "c++": 1.25,
-  cmake: 1.25,
-  cuda: 1.25,
-  fortran: 1.25,
-  "objective-c": 1.25,
-  rust: 1.25,
-  vhdl: 1.25,
-  zig: 1.25,
+  assembly: 1.4,
+  c: 1.4,
+  "c++": 1.4,
+  cmake: 1.4,
+  cuda: 1.4,
+  fortran: 1.4,
+  "objective-c": 1.4,
+  rust: 1.4,
+  vhdl: 1.4,
+  zig: 1.4,
 };
 
 // @ts-ignore
