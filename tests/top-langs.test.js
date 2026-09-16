@@ -75,9 +75,11 @@ afterEach(() => {
 });
 
 describe("Test /api/top-langs", () => {
-  it("should include notebooks and use unweighted language sizes", async () => {
+  it("should lower Python and boost notebooks and low-level languages", async () => {
     const languages = {
       C: { color: "#555", name: "C", size: 100 },
+      "C++": { color: "#f34b7d", name: "C++", size: 100 },
+      Rust: { color: "#dea584", name: "Rust", size: 100 },
       Python: { color: "#3572A5", name: "Python", size: 200 },
       TypeScript: { color: "#3178C6", name: "TypeScript", size: 300 },
       "Jupyter Notebook": {
@@ -107,12 +109,26 @@ describe("Test /api/top-langs", () => {
       },
     });
 
-    await topLangs({ query: { username: "anuraghazra" } }, res);
+    await topLangs(
+      { query: { username: "anuraghazra", langs_count: 10 } },
+      res,
+    );
 
     expect(res.send).toHaveBeenCalledWith(
-      renderTopLanguages(languages, {
-        hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript"],
-      }),
+      renderTopLanguages(
+        {
+          ...languages,
+          C: { ...languages.C, size: 125 },
+          "C++": { ...languages["C++"], size: 125 },
+          Rust: { ...languages.Rust, size: 125 },
+          Python: { ...languages.Python, size: 60 },
+          "Jupyter Notebook": { ...languages["Jupyter Notebook"], size: 500 },
+        },
+        {
+          langs_count: 10,
+          hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript"],
+        },
+      ),
     );
     expect(res.send.mock.calls[0][0]).toContain("jupyter notebook");
   });

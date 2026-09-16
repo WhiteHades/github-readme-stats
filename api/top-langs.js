@@ -18,6 +18,20 @@ import { fetchTopLanguages } from "../src/fetchers/top-languages.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
 const HIDDEN_LANGUAGES = ["Vue", "HTML", "CSS", "SCSS", "JavaScript"];
+const LANGUAGE_WEIGHTS = {
+  python: 0.3,
+  "jupyter notebook": 1.25,
+  assembly: 1.25,
+  c: 1.25,
+  "c++": 1.25,
+  cmake: 1.25,
+  cuda: 1.25,
+  fortran: 1.25,
+  "objective-c": 1.25,
+  rust: 1.25,
+  vhdl: 1.25,
+  zig: 1.25,
+};
 
 // @ts-ignore
 export default async (req, res) => {
@@ -127,6 +141,9 @@ export default async (req, res) => {
       size_weight,
       count_weight,
     );
+    for (const language of Object.values(topLangs)) {
+      language.size *= LANGUAGE_WEIGHTS[language.name.toLowerCase()] ?? 1;
+    }
     const cacheSeconds = resolveCacheSeconds({
       requested: parseInt(cache_seconds, 10),
       def: CACHE_TTL.TOP_LANGS_CARD.DEFAULT,
