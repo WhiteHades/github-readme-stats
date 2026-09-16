@@ -17,9 +17,10 @@ import { renderError } from "../src/common/render.js";
 import { fetchTopLanguages } from "../src/fetchers/top-languages.js";
 import { isLocaleAvailable } from "../src/translations.js";
 
-const HIDDEN_LANGUAGES = ["Vue", "HTML", "CSS", "SCSS", "JavaScript"];
+const HIDDEN_LANGUAGES = ["Vue", "HTML", "CSS", "SCSS", "JavaScript", "TeX"];
 const LANGUAGE_WEIGHTS = {
-  python: 0.3,
+  python: 0.25,
+  typescript: 0.5,
   "jupyter notebook": 1.25,
   assembly: 1.25,
   c: 1.25,

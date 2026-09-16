@@ -75,7 +75,7 @@ afterEach(() => {
 });
 
 describe("Test /api/top-langs", () => {
-  it("should lower Python and boost notebooks and low-level languages", async () => {
+  it("should apply language weights and hide TeX", async () => {
     const languages = {
       C: { color: "#555", name: "C", size: 100 },
       "C++": { color: "#f34b7d", name: "C++", size: 100 },
@@ -88,6 +88,7 @@ describe("Test /api/top-langs", () => {
         size: 400,
       },
       HTML: { color: "#0f0", name: "HTML", size: 500 },
+      TeX: { color: "#3D6117", name: "TeX", size: 1000 },
     };
     const res = { setHeader: jest.fn(), send: jest.fn() };
     mock.onPost("https://api.github.com/graphql").reply(200, {
@@ -121,16 +122,18 @@ describe("Test /api/top-langs", () => {
           C: { ...languages.C, size: 125 },
           "C++": { ...languages["C++"], size: 125 },
           Rust: { ...languages.Rust, size: 125 },
-          Python: { ...languages.Python, size: 60 },
+          Python: { ...languages.Python, size: 50 },
+          TypeScript: { ...languages.TypeScript, size: 150 },
           "Jupyter Notebook": { ...languages["Jupyter Notebook"], size: 500 },
         },
         {
           langs_count: 10,
-          hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript"],
+          hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript", "TeX"],
         },
       ),
     );
     expect(res.send.mock.calls[0][0]).toContain("jupyter notebook");
+    expect(res.send.mock.calls[0][0]).not.toMatch(/>\s*tex\s*</i);
   });
 
   it("should test the request", async () => {
@@ -150,7 +153,7 @@ describe("Test /api/top-langs", () => {
     expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
     expect(res.send).toHaveBeenCalledWith(
       renderTopLanguages(langs, {
-        hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript"],
+        hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript", "TeX"],
       }),
     );
   });
@@ -178,7 +181,7 @@ describe("Test /api/top-langs", () => {
     expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
     expect(res.send).toHaveBeenCalledWith(
       renderTopLanguages(langs, {
-        hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript"],
+        hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript", "TeX"],
         hide_title: true,
         card_width: 100,
         title_color: "fff",
@@ -208,7 +211,7 @@ describe("Test /api/top-langs", () => {
     expect(res.setHeader).toHaveBeenCalledWith("Content-Type", "image/svg+xml");
     expect(res.send).toHaveBeenCalledWith(
       renderTopLanguages(langs, {
-        hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript"],
+        hide: ["Vue", "HTML", "CSS", "SCSS", "JavaScript", "TeX"],
         layout: "compact",
         single_column: true,
       }),
